@@ -21,7 +21,7 @@ cargo install --path .
 Usage: failfs [OPTIONS] [MOUNT_POINT]
 
 Arguments:
-  [MOUNT_POINT]  Where to mount the filesystem [default: /mnt/failsfs]
+  [MOUNT_POINT]  Where to mount the filesystem [default: /mnt/failfs]
 
 Options:
   -f, --filename <FILENAME>  [default: test.txt]
