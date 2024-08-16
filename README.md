@@ -33,3 +33,9 @@ Example:
 ```sh
 failfs ./test-dir -f testfile.svg
 ```
+
+Unmounting the directory:
+
+```sh
+umount ./test-dir
+```
