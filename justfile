@@ -1,4 +1,4 @@
 run:
     #!/usr/bin/env bash
     trap 'umount test; rm -rf test' EXIT
-    cargo r -- ./test
+    cargo r -- ./test -f test.json

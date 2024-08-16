@@ -50,6 +50,8 @@ struct Args {
     /// Where to mount the filesystem
     #[arg(default_value = "/mnt/failsfs")]
     mount_point: PathBuf,
+    #[arg(long, short, default_value = "test.txt")]
+    filename: String,
 }
 
 struct FailFs<'a> {
@@ -130,5 +132,12 @@ fn main() {
 
     std::fs::create_dir_all(&args.mount_point).expect("Failed to create the mount directory");
 
-    fuser::mount2(FailFs { name: "text.txt" }, args.mount_point, &options).unwrap();
+    fuser::mount2(
+        FailFs {
+            name: &args.filename,
+        },
+        args.mount_point,
+        &options,
+    )
+    .unwrap();
 }
