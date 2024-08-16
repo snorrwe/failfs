@@ -48,7 +48,7 @@ const TTL: Duration = Duration::from_secs(1); // 1 second
 #[derive(clap_derive::Parser)]
 struct Args {
     /// Where to mount the filesystem
-    #[arg(default_value = "/mnt/failsfs")]
+    #[arg(default_value = "/mnt/failfs")]
     mount_point: PathBuf,
     #[arg(long, short, default_value = "test.txt")]
     filename: String,
@@ -126,7 +126,7 @@ impl Filesystem for FailFs<'_> {
 
 fn main() {
     let args = Args::parse();
-    println!("Hello, world! {}", args.mount_point.display());
+    println!("Mounting FailFS at: {}", args.mount_point.display());
 
     let options = vec![MountOption::RO, MountOption::FSName("failfs".to_string())];
 
