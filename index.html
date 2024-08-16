@@ -1,0 +1,15 @@
+<body>
+    <input id="file" type="file" />
+    <script type="module">
+        const elem = document.getElementById("file");
+        elem.addEventListener("change", () => {
+            if (elem.files.length == 1) {
+                console.log("File selected: ", elem.files[0]);
+                const reader = new FileReader();
+                reader.readAsDataURL(elem.files[0]);
+                reader.onload = () => console.log(reader.result);
+                reader.onerror = (error) => console.error("poggies", error);
+            }
+        });
+    </script>
+</body>

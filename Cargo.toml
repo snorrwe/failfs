@@ -1,0 +1,10 @@
+[package]
+name = "failfs"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+clap = "4.5.16"
+clap_derive = "4.5.13"
+fuser = "0.14.0"
+libc = "0.2.156"
