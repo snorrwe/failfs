@@ -28,6 +28,7 @@
               cargo-edit
               fuse3
               pkg-config
+              tree
             ];
             LD_LIBRARY_PATH = lib.makeLibraryPath ([ fuse3 ]);
           };
