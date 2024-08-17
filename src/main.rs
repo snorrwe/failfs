@@ -25,7 +25,7 @@ const DIR_ATTR: FileAttr = FileAttr {
     blksize: 512,
 };
 
-const REPORTED_FILE_SIZE: u64 = 1024 * 1024 * 1024;
+const REPORTED_FILE_SIZE: u64 = 1024 * 1024;
 const MIN_CHUNKS: u64 = 4;
 
 const FILE_ATTR: FileAttr = FileAttr {
