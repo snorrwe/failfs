@@ -7,7 +7,7 @@ use clap::Parser;
 use fuser::{FileAttr, FileType, Filesystem, MountOption};
 use libc::{ENOENT, EOWNERDEAD};
 
-const HELLO_DIR_ATTR: FileAttr = FileAttr {
+const DIR_ATTR: FileAttr = FileAttr {
     ino: 1,
     size: 0,
     blocks: 0,
@@ -25,7 +25,7 @@ const HELLO_DIR_ATTR: FileAttr = FileAttr {
     blksize: 512,
 };
 
-const HELLO_TXT_ATTR: FileAttr = FileAttr {
+const FILE_ATTR: FileAttr = FileAttr {
     ino: 2,
     size: 13,
     blocks: 1,
@@ -109,7 +109,7 @@ impl Filesystem for FailFs<'_> {
         reply: fuser::ReplyEntry,
     ) {
         if parent == 1 && name.to_str() == Some(self.name) {
-            reply.entry(&TTL, &HELLO_TXT_ATTR, 0);
+            reply.entry(&TTL, &FILE_ATTR, 0);
         } else {
             reply.error(ENOENT);
         }
@@ -117,8 +117,8 @@ impl Filesystem for FailFs<'_> {
 
     fn getattr(&mut self, _req: &fuser::Request<'_>, ino: u64, reply: fuser::ReplyAttr) {
         match ino {
-            1 => reply.attr(&TTL, &HELLO_DIR_ATTR),
-            2 => reply.attr(&TTL, &HELLO_TXT_ATTR),
+            1 => reply.attr(&TTL, &DIR_ATTR),
+            2 => reply.attr(&TTL, &FILE_ATTR),
             _ => reply.error(ENOENT),
         }
     }
