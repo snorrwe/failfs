@@ -25,9 +25,12 @@ const DIR_ATTR: FileAttr = FileAttr {
     blksize: 512,
 };
 
+const REPORTED_FILE_SIZE: u64 = 1024 * 1024 * 1024;
+const MIN_CHUNKS: u64 = 4;
+
 const FILE_ATTR: FileAttr = FileAttr {
     ino: 2,
-    size: 13,
+    size: REPORTED_FILE_SIZE,
     blocks: 1,
     atime: UNIX_EPOCH, // 1970-01-01 00:00:00
     mtime: UNIX_EPOCH,
@@ -90,15 +93,36 @@ impl Filesystem for FailFs<'_> {
     fn read(
         &mut self,
         _req: &fuser::Request<'_>,
-        _ino: u64,
+        ino: u64,
         _fh: u64,
-        _offset: i64,
-        _size: u32,
+        offset: i64,
+        size: u32,
         _flags: i32,
         _lock_owner: Option<u64>,
         reply: fuser::ReplyData,
     ) {
-        reply.error(EOWNERDEAD);
+        if ino == 2 {
+            let chunk_size = (REPORTED_FILE_SIZE / MIN_CHUNKS).min(size as u64);
+            let progress = (offset + chunk_size as i64) as f64 / REPORTED_FILE_SIZE as f64;
+            if progress < 0.72 {
+                println!("Sending chunk. Offset={offset} Size={chunk_size} Progress={progress}");
+                // repeat the template string for chunk_size bytes, so the read is
+                // incomplete
+                const TEMPLATE: &str = "hello world";
+                let data = std::iter::repeat(TEMPLATE)
+                    .flat_map(|t| t.as_bytes())
+                    .copied()
+                    .take(chunk_size as usize)
+                    .collect::<Vec<_>>();
+                reply.data(data.as_slice());
+            } else {
+                println!("Progress={progress}. Reporting error");
+                // if not the first chunk, then raise an error
+                reply.error(EOWNERDEAD);
+            }
+        } else {
+            reply.error(ENOENT);
+        }
     }
 
     fn lookup(
