@@ -1,21 +1,27 @@
 <body>
     <input id="file" type="file" />
-    <div id="error"></div>
+    <div id="progress"></div>
+    <div id="status"></div>
     <script type="module">
         const elem = document.getElementById("file");
         elem.addEventListener("change", () => {
             if (elem.files.length == 1) {
                 console.log("File selected: ", elem.files[0]);
-                document.getElementById("error").innerHTML = "";
+                document.getElementById("status").innerHTML = "";
+                document.getElementById("progress").innerHTML = "";
                 const reader = new FileReader();
                 reader.readAsDataURL(elem.files[0]);
                 reader.onload = () => {
-                    document.getElementById("error").innerHTML = "✓ File loaded";
+                    document.getElementById("status").innerHTML = "✓ File loaded";
+                };
+                reader.onprogress = (p) => {
+                    console.log("progress", p);
+                    document.getElementById("progress").innerHTML = `Progress: ${(p.loaded / p.total) * 100}%`;
                 };
                 reader.onerror = (error) => {
                     console.error("poggies", error);
-                    document.getElementById("error").innerHTML =
-                        "x Failed to read the file";
+                    document.getElementById("status").innerHTML =
+                        `x Failed to read the file: ${error.target.error}`;
                 };
             }
         });
