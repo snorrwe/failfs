@@ -1,14 +1,22 @@
 <body>
     <input id="file" type="file" />
+    <div id="error"></div>
     <script type="module">
         const elem = document.getElementById("file");
         elem.addEventListener("change", () => {
             if (elem.files.length == 1) {
                 console.log("File selected: ", elem.files[0]);
+                document.getElementById("error").innerHTML = "";
                 const reader = new FileReader();
                 reader.readAsDataURL(elem.files[0]);
-                reader.onload = () => console.log(reader.result);
-                reader.onerror = (error) => console.error("poggies", error);
+                reader.onload = () => {
+                    document.getElementById("error").innerHTML = "✓ File loaded";
+                };
+                reader.onerror = (error) => {
+                    console.error("poggies", error);
+                    document.getElementById("error").innerHTML =
+                        "x Failed to read the file";
+                };
             }
         });
     </script>
